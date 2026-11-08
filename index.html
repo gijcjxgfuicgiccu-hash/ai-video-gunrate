@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Video Gunrate</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090b16;color:white;
+ font-family:Arial,sans-serif;
+}
+header{
+ padding:20px;text-align:center;
+ background:#11152a;border-bottom:1px solid #292d49;
+}
+.logo{font-size:26px;font-weight:bold;color:#a78bfa}
+header p{color:#aab0c9;font-size:13px}
+main{max-width:650px;margin:auto;padding:18px}
+h2{font-size:22px}
+.panel{
+ background:#15192c;border:1px solid #303550;
+ padding:18px;border-radius:16px;margin:15px 0;
+}
+label{display:block;margin:14px 0 8px;color:#d7d9e8}
+textarea,select{
+ width:100%;padding:14px;border-radius:10px;
+ background:#090d1c;color:white;
+ border:1px solid #454a67;font-size:15px;
+}
+textarea{height:110px;resize:vertical}
+button{
+ padding:13px;border:0;border-radius:10px;
+ font-size:15px;font-weight:bold;cursor:pointer;
+}
+.tabs{display:flex;gap:10px}
+.tabs button{flex:1;background:#282d46;color:white}
+.tabs button.active{
+ background:#7654ec;color:white;
+}
+.generate{
+ width:100%;margin-top:18px;
+ background:linear-gradient(90deg,#7654ec,#b04fe8);
+ color:white;font-size:17px;padding:16px;
+}
+.upload{
+ display:block;padding:15px;border:1px dashed #777;
+ border-radius:10px;text-align:center;
+}
+#preview{width:100%;max-height:250px;
+ object-fit:contain;border-radius:10px;margin-top:12px;
+ display:none}
+#status{color:#c4b5fd;line-height:1.6}
+.small{color:#9299b3;font-size:12px;line-height:1.6}
+footer{text-align:center;padding:25px;color:#9299b3}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">✨ AI VIDEO GUNRATE</div>
+ <p>Create videos with your imagination</p>
+</header>
+
+<main>
+ <h2>🎬 AI Video Generator</h2>
+ <p class="small">Turn your ideas and images into amazing videos.</p>
+
+ <div class="panel">
+  <label>Choose Generation Mode</label>
+  <div class="tabs">
+   <button id="textTab" class="active"
+    onclick="setMode('text')">Text to Video</button>
+   <button id="imageTab"
+    onclick="setMode('image')">Image to Video</button>
+  </div>
+
+  <label>Describe Your Video</label>
+  <textarea id="prompt"
+   placeholder="A cute 3D animated monster eating a giant candy..."></textarea>
+
+  <div id="uploadArea" style="display:none">
+   <label>Upload Your Image</label>
+   <label class="upload">
+    📷 Select Image
+    <input id="image" type="file" accept="image/*"
+     hidden onchange="showImage(event)">
+   </label>
+   <img id="preview">
+  </div>
+
+  <label>Video Style</label>
+  <select id="style">
+   <option>Realistic</option>
+   <option>3D Animation</option>
+   <option>Cinematic</option>
+   <option>Cartoon</option>
+  </select>
+
+  <label>Video Duration</label>
+  <select id="duration">
+   <option value="5">5 Seconds</option>
+   <option value="10">10 Seconds</option>
+  </select>
+
+  <button class="generate" onclick="generate()">
+   ✨ Generate Video
+  </button>
+
+  <p id="status"></p>
+  <p class="small">
+   AI engine connection is required for actual video generation.
+  </p>
+ </div>
+
+ <div class="panel">
+  <h3>💡 Prompt Ideas</h3>
+  <p onclick="idea(0)">👾 A monster eating colorful candy</p>
+  <p onclick="idea(1)">🐱 A cute cat flying in space</p>
+  <p onclick="idea(2)">🏎️ A futuristic racing car in rain</p>
+ </div>
+</main>
+
+<footer>
+ AI VIDEO GUNRATE © 2026
+</footer>
+
+<script>
+let mode="text";
+
+function setMode(m){
+ mode=m;
+ document.getElementById("textTab").classList.toggle("active",m==="text");
+ document.getElementById("imageTab").classList.toggle("active",m==="image");
+ document.getElementById("uploadArea").style.display=
+  m==="image"?"block":"none";
+ document.getElementById("status").textContent="";
+}
+
+function showImage(event){
+ const file=event.target.files[0];
+ if(!file)return;
+ if(!file.type.startsWith("image/")){
+  alert("Please select an image");return;
+ }
+ const url=URL.createObjectURL(file);
+ const preview=document.getElementById("preview");
+ preview.src=url;
+ preview.style.display="block";
+}
+
+function idea(n){
+ const ideas=[
+ "A cute 3D monster eating colorful candy with funny expressions",
+ "A cute fluffy cat flying through a magical galaxy",
+ "A futuristic racing car driving through a rainy neon city"
+ ];
+ document.getElementById("prompt").value=ideas[n];
+}
+
+function generate(){
+ const prompt=document.getElementById("prompt").value.trim();
+ const image=document.getElementById("image").files[0];
+ const status=document.getElementById("status");
+
+ if(!prompt){
+  status.textContent="⚠️ Please enter a video prompt.";
+  return;
+ }
+ if(mode==="image"&&!image){
+  status.textContent="⚠️ Please upload an image.";
+  return;
+ }
+
+ status.textContent=
+ "✅ Your request is ready! Mode: "+mode+
+ ". Style: "+document.getElementById("style").value+
+ ". Duration: "+document.getElementById("duration").value+
+ " seconds. Connect an AI video backend to generate the actual video.";
+}
+</script>
+</body>
+</html>
